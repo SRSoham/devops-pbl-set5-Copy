@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -12,7 +11,14 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn -B clean package -DskipTests'
+                withEnv([
+                    'JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64',
+                    'PATH+JAVA17=/usr/lib/jvm/java-17-openjdk-amd64/bin'
+                ]) {
+                    sh 'java -version'
+                    sh 'javac -version'
+                    sh 'mvn -B clean package -DskipTests'
+                }
             }
         }
 
